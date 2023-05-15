@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
-from .models import User
+from .models import User, WeekDay
+
 # Create your views here.
 
 index_template = f"""
@@ -57,3 +58,7 @@ def grade(request):
     context = {'user': user, 'grade': grade}
     return HttpResponse('Congratulations on the grade method!')
 #Дописав
+
+def my_week(request):
+    my_week = WeekDay.objects.all()
+    return HttpResponse(my_week)
