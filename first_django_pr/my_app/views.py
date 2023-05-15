@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
-from .models import User
+from .models import User, WeekDay
+
 # Create your views here.
 
 index_template = f"""
@@ -32,14 +33,15 @@ index_template = f"""
 def index(request):
     return HttpResponse(index_template)
 
+#Дописав
 def login(request):
     if request.method == 'POST':
         name = request.POST.get('name')
         password = request.POST.get('password')
         return HttpResponse(f"Username: {name}, password: {password}")
+#Дописав
 
-
-
+#Дописав
 def course(request):
     if request.method == 'POST':
         course = request.POST.get('course')
@@ -49,9 +51,14 @@ def course(request):
         return render(request, 'get_grade.html', context) #потім створю html
     else:
         return HttpResponse('Congratulations on the course method!')
-
+#Дописав
 def grade(request):
     user = User()
     grade = user.get_grade()
     context = {'user': user, 'grade': grade}
     return HttpResponse('Congratulations on the grade method!')
+#Дописав
+
+def my_week(request):
+    my_week = WeekDay.objects.all()
+    return HttpResponse(my_week)
