@@ -3,7 +3,6 @@ from django.http import HttpResponse,HttpResponseRedirect
 from .models import User
 # Create your views here.
 
-
 index_template = f"""
            <form method="post" action="/login/">
               <div>
