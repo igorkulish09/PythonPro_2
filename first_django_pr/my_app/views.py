@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.http import HttpResponse,HttpResponseRedirect
-from .models import User
+from django.http import HttpResponse
+from .models import User, WeekDay
+
 # Create your views here.
 
 index_template = f"""
@@ -38,8 +39,6 @@ def login(request):
         password = request.POST.get('password')
         return HttpResponse(f"Username: {name}, password: {password}")
 
-
-
 def course(request):
     if request.method == 'POST':
         course = request.POST.get('course')
@@ -55,3 +54,8 @@ def grade(request):
     grade = user.get_grade()
     context = {'user': user, 'grade': grade}
     return HttpResponse('Congratulations on the grade method!')
+
+
+def my_week(request):
+    my_week = WeekDay.objects.all()
+    return HttpResponse(my_week)
