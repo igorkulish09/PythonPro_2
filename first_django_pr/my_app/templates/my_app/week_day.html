@@ -1,0 +1,7 @@
+<h2>Week Day {{ week_day.day }}</h2>
+
+<ul>
+    {% for note in week_day.note_set.all %}
+        <li>{{ note.title }}</li>
+    {% endfor %}
+</ul>
