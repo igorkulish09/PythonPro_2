@@ -1,13 +1,16 @@
 from django.db import models
 
 # Create your models here.
-
 class WeekDay(models.Model):
-    title = models.CharField(max_length=20)
-    note = models.CharField(max_length=250)
+    day = models.CharField(max_length=20)
 
     def __str__(self):
-        return f"WeekDay: {self.title}, day note: {self.note}"
+        return f"Week Day: {self.day}"
+
+class Note(models.Model):
+    week_day = models.ForeignKey(WeekDay, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    msg = models.CharField(max_length=250)
 
 class student(models.Model):
     username = models.CharField(max_length=20)
