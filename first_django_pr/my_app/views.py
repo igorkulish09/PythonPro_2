@@ -1,6 +1,8 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 from .models import User, WeekDay
+from django.template import loader
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
@@ -39,22 +41,16 @@ def login(request):
         password = request.POST.get('password')
         return HttpResponse(f"Username: {name}, password: {password}")
 
-def course(request):
-    if request.method == 'POST':
-        course = request.POST.get('course')
-        user = User()
-        user.choose_course(course)
-        context = {'user': user}
-        return render(request, 'get_grade.html', context) #потім створю html
-    else:
-        return HttpResponse('Congratulations on the course method!')
-
-def grade(request):
-    user = User()
-    grade = user.get_grade()
-    context = {'user': user, 'grade': grade}
-    return HttpResponse('Congratulations on the grade method!')
-
 def my_week(request):
-    my_week = WeekDay.objects.all()
-    return HttpResponse(my_week)
+
+    template = loader.get_template("my_app/week.html")
+    context = {
+        "days": WeekDay.objects.all()
+    }
+
+    return HttpResponse(template.render(context, request))
+
+def my_day(request, week_day_id):
+    day = get_object_or_404(WeekDay, pk=week_day_id)
+    #day = WeekDay.objects.get(pk=week_day_id)
+    return render(request, "my_app/week_day.html", {"week_day": day})

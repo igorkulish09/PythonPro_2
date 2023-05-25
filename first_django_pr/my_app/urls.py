@@ -3,8 +3,10 @@ from . import views
 
 urlpatterns = [
     path("", views.index, name='index' ),
-    path("login/", views.login, name="login"),
-    path("grade/", views.grade, name="grade"),
-    path("course/", views.course, name="course"),
-    path("week/", views.my_week, name="my_week")
+    path("week/", views.my_week, name="my_week"),
+    #path("day/<int:week_day_id>/note/<int:note_id>", views.my_day, name="week_day"),
+    path("day/<int:week_day_id>/", views.my_day, name="week_day"),
+    #path("note/<int:note_id>/", views.my_day, name="note_detail"),
+    path('note/<int:week_day_id>/', views.my_day, name='note_detail')
+
 ]
