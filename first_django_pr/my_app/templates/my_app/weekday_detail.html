@@ -6,9 +6,9 @@
 
 {% block day_detail %}
     <ul>
-        {% for note in object.note_set.all %}
-            <li>{{ note.title }}</li>
-        {% endfor %}
+        {% for note in object.notes.all %}
+    <li>{{ note.title }}</li>
+    {% endfor %}
     </ul>
 
     <form action="{% url 'new_note' object.id %}" method="post">

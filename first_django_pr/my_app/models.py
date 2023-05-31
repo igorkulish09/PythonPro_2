@@ -8,8 +8,10 @@ class WeekDay(models.Model):
         return f"Week Day: {self.day}"
 
 class Note(models.Model):
-    week_day = models.ForeignKey(WeekDay, on_delete=models.CASCADE)
+    week_day = models.ForeignKey(WeekDay, on_delete=models.CASCADE, related_name='notes')
     title = models.CharField(max_length=100)
     msg = models.CharField(max_length=250)
     assignee = models.CharField(max_length=100, blank=True, null=True) #додав
     email = models.EmailField(blank=True, null=True) # додав
+
+
