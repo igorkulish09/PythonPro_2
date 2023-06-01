@@ -1,6 +1,6 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from .models import Note
+
 
 class NoteForm(forms.ModelForm):
     title = forms.CharField(min_length=5, max_length=100)
@@ -9,34 +9,34 @@ class NoteForm(forms.ModelForm):
 
     class Meta:
         model = Note
-        fields = ['msg', 'assignee', 'email']
+        fields = ["msg", "assignee", "email"]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['title'].required = True
+        self.fields["title"].required = True
 
     def clean_assignee(self):
-        Assignee = self.cleaned_data.get('assignee')
+        Assignee = self.cleaned_data.get("assignee")
         if Assignee and len(Assignee.split()) < 2:
             raise forms.ValidationError("Assignee should contain at least two words.")
         return Assignee
 
     def clean_email(self):
-        email = self.cleaned_data.get('email')
-        if email and not email.endswith('@ithillel.ua'):
+        email = self.cleaned_data.get("email")
+        if email and not email.endswith("@ithillel.ua"):
             raise forms.ValidationError("Email should be associated with ithillel.ua.")
         return email
 
     def clean_title(self):
-        data = self.cleaned_data['title']
-        if len(data.split(' ')) < 2:
+        data = self.cleaned_data["title"]
+        if len(data.split(" ")) < 2:
             raise forms.ValidationError("Please create Title with at least two words")
         return data
 
     def clean(self):
         cleaned_data = super().clean()
-        title = cleaned_data.get('title')
-        msg = cleaned_data.get('msg')
+        title = cleaned_data.get("title")
+        msg = cleaned_data.get("msg")
 
         if title and msg and (title not in msg):
             raise forms.ValidationError("Please start your note from the Title")
@@ -46,7 +46,6 @@ class NoteForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
-
 
 
 # class NoteForm(forms.Form):

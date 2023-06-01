@@ -4,26 +4,25 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('my_app', '0004_rename_title_weekday_day_remove_weekday_note_note'),
+        ("my_app", "0004_rename_title_weekday_day_remove_weekday_note_note"),
     ]
 
     operations = [
         migrations.DeleteModel(
-            name='student',
+            name="student",
         ),
         migrations.DeleteModel(
-            name='User',
+            name="User",
         ),
         migrations.AddField(
-            model_name='note',
-            name='assignee',
+            model_name="note",
+            name="assignee",
             field=models.CharField(blank=True, max_length=100, null=True),
         ),
         migrations.AddField(
-            model_name='note',
-            name='email',
+            model_name="note",
+            name="email",
             field=models.EmailField(blank=True, max_length=254, null=True),
         ),
     ]
