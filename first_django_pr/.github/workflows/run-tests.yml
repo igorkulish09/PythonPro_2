@@ -1,5 +1,4 @@
-  name: Run Linter and Tests
-  on:
+name: Run Linter and Tests
+on:
     - push
     - pull_request
-  jobs:
