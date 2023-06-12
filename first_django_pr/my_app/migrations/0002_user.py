@@ -4,20 +4,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('my_app', '0001_initial'),
+        ("my_app", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='User',
+            name="User",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=50)),
-                ('password', models.CharField(max_length=50)),
-                ('language', models.CharField(default='English', max_length=50)),
-                ('course', models.CharField(blank=True, max_length=50)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=50)),
+                ("password", models.CharField(max_length=50)),
+                ("language", models.CharField(default="English", max_length=50)),
+                ("course", models.CharField(blank=True, max_length=50)),
             ],
         ),
     ]

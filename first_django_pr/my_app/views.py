@@ -1,56 +1,84 @@
-from django.shortcuts import render
-from django.http import HttpResponse,HttpResponseRedirect
-from .models import User, WeekDay
+from django.shortcuts import render, get_object_or_404, redirect
+from django.http import HttpResponse
+from .models import WeekDay, Note
 from django.template import loader
-from django.shortcuts import get_object_or_404
+from .forms import NoteForm
+from django.views.generic import DetailView, FormView, ListView
+from django.urls import reverse
+
 
 # Create your views here.
-
-index_template = f"""
-           <form method="post" action="/login/">
-              <div>
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name">
-              </div>
-              <div>
-                <label for="password">Password:</label>
-                <input type="text" id="password" name="password">
-              </div>
-              <div>
-                <input type="radio" id="python" name="course" value="Python Programming">
-                <label for="python">Python Programming</label>
-              </div>
-              <div>
-                <input type="radio" id="java" name="course" value="Java Programming">
-                <label for="java">Java Programming</label>
-              </div>
-              <div>
-                <input type="radio" id="web" name="course" value="Web Development">
-                <label for="web">Web Development</label>
-              </div>
-              <button type="submit">Submit</button>
-            </form>
-"""
-
 def index(request):
-    return HttpResponse(index_template)
+    return redirect("my_week")
 
-def login(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        password = request.POST.get('password')
-        return HttpResponse(f"Username: {name}, password: {password}")
+
+class DaysList(ListView):
+    model = WeekDay
+    template_name = "my_app/week.html"
+    context_object_name = "days"
+
 
 def my_week(request):
-
     template = loader.get_template("my_app/week.html")
-    context = {
-        "days": WeekDay.objects.all()
-    }
+    context = {"days": WeekDay.objects.all()}
 
     return HttpResponse(template.render(context, request))
 
+
+class DayDetail(DetailView):
+    model = WeekDay
+    template_name = "my_app/weekday_detail.html"
+
+
 def my_day(request, week_day_id):
     day = get_object_or_404(WeekDay, pk=week_day_id)
-    #day = WeekDay.objects.get(pk=week_day_id)
-    return render(request, "my_app/week_day.html", {"week_day": day})
+    return render(request, "my_app/weekday_detail.html", {"week_day": day})
+
+
+class NoteFormView(FormView):
+    form_class = NoteForm
+    template_name = "my_app/weekday_detail.html"
+
+    def form_valid(self, form):
+        week_day = get_object_or_404(WeekDay, pk=self.kwargs["pk"])
+        Note.objects.create(
+            week_day=week_day,
+            title=form.cleaned_data["title"],
+            msg=form.cleaned_data["msg"],
+        )
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["object"] = get_object_or_404(WeekDay, pk=self.kwargs["pk"])
+        return context
+
+    def get_success_url(self):
+        return reverse("week_day", kwargs={"pk": self.kwargs["pk"]})
+
+
+def add_note(request, week_day_id):
+    week_day = get_object_or_404(WeekDay, pk=week_day_id)
+    form_data = NoteForm(request.POST)
+    if form_data.is_valid():
+        Note.objects.create(
+            week_day=week_day,
+            title=form_data.cleaned_data["title"],
+            msg=form_data.cleaned_data["msg"],
+        )
+    return render(
+        request,
+        "my_app/weekday_detail.html",
+        {"week_day": week_day, "error_message": form_data.errors},
+    )
+
+
+# def add_note(request, week_day_id):
+#     week_day = get_object_or_404(WeekDay, pk=week_day_id)
+#     form_data = NoteForm(request.POST)
+#     if form_data.is_valid():
+#         note = form_data.save(commit=False)
+#         note.week_day = week_day
+#         note.save()
+#         return redirect('day_detail', pk=week_day_id)
+#     return render(request, "my_app/weekday_detail.html", {"week_day": week_day, "error_message": form_data.errors})

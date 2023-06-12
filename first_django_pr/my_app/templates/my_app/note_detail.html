@@ -1,10 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+<ul>
+    {% for note in week_day.note_set.all %}
+        <li><a href="{% url 'note_detail' note.id %}">{{ note.title }}</a></li>
+    {% endfor %}
+</ul>
