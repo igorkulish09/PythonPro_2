@@ -2,4 +2,3 @@ name: Run Linter and Tests
 on:
     - push
     - pull_request
-jobs: 1
